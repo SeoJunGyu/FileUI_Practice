@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public static class DataTableManager
 {
@@ -16,18 +17,33 @@ public static class DataTableManager
 #if UNITY_EDITOR
         foreach(var id in DataTableIds.StringTableIds)
         {
-            var table = new StringTable();
-
-            //table.Load("StringTable");
-            table.Load(id);
-            tables.Add(id, table);
+            if(id.GetType() == typeof(ItemTable))
+            {
+                var table = new ItemTable();
+                table.Load(id);
+                tables.Add(id, table);
+            }
+            else
+            {
+                var table = new StringTable();
+                //table.Load("StringTable");
+                table.Load(id);
+                tables.Add(id, table);
+            }
         }
 #else
-        var stringTable = new StringTable();
-
-        //table.Load("StringTable");
-        stringTable.Load(DataTableIds.String); //현재 언어설정의 언어 테이블 로드
-        tables.Add(DataTableIds.String, stringTable);
+        if(id.GetType() == typeof(ItemTable))
+        {
+            var table = new ItemTable();
+            stringTable.Load(DataTableIds.String); //현재 언어설정의 언어 테이블 로드
+            tables.Add(DataTableIds.String, stringTable);
+        }
+        else
+        {
+            var table = new StringTable();
+            stringTable.Load(DataTableIds.DefaultItem); //현재 언어설정의 언어 테이블 로드
+            tables.Add(DataTableIds.DefaultItem, stringTable);
+        }
 #endif
 
     }
