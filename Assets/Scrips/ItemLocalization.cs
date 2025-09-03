@@ -18,9 +18,14 @@ public class ItemLocalization : MonoBehaviour
 
     public void OnChangeItem()
     {
-        var stringTable = DataTableManager;
-        var tmp = stringTable.Get(stringId);
+        var itemTable = DataTableManager.Get<ItemTable>(DataTableIds.ItemTableId);
 
-        nameText.text = tmp;
+        var data = itemTable.Get(Items.Sword.ToString());
+
+        nameText.text = data.Name;
+        categoryText.text = data.Category;
+        valueText.text = data.Value;
+        priceText.text = data.Price;
+        explaneText.text = data.Explane;
     }
 }

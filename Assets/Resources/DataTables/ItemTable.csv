@@ -1,9 +1,9 @@
-Id,검,Category,Value,Price,Explane
-SWORD,활,Equip,10,50,이건 검이다.
-BOW,생명,Equip,20,100,이건 활이다.
-HEART,갑옷,Consume,30,150,이건 생명이다.
-AMOR,투구,Equip,40,200,이건 갑옷이다.
-HELMET,방패,Equip,50,250,이건 투구이다.
-SHIELD,별,Equip,60,300,이건 방패이다.
-STAR,돈,Reward,70,350,이건 별이다.
-GOLD,검,Reward,80,400,이건 돈이다.
+Id,Name,Category,Value,Price,Explane
+SWORD,검,Equip,10,50,이건 검이다.
+BOW,활,Equip,20,100,이건 활이다.
+HEART,생명,Consume,30,150,이건 생명이다.
+AMOR,갑옷,Equip,40,200,이건 갑옷이다.
+HELMET,투구,Equip,50,250,이건 투구이다.
+SHIELD,방패,Equip,60,300,이건 방패이다.
+STAR,별,Reward,70,350,이건 별이다.
+GOLD,돈,Reward,80,400,이건 돈이다.

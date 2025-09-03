@@ -15,21 +15,16 @@ public static class DataTableManager
     private static void Init()
     {
 #if UNITY_EDITOR
-        foreach(var id in DataTableIds.StringTableIds)
+        var itemtable = new ItemTable();
+        itemtable.Load(DataTableIds.ItemTableId);
+        tables.Add(DataTableIds.ItemTableId, itemtable);
+
+        foreach (var id in DataTableIds.StringTableIds)
         {
-            if(id.GetType() == typeof(ItemTable))
-            {
-                var table = new ItemTable();
-                table.Load(id);
-                tables.Add(id, table);
-            }
-            else
-            {
-                var table = new StringTable();
-                //table.Load("StringTable");
-                table.Load(id);
-                tables.Add(id, table);
-            }
+            var table = new StringTable();
+            //table.Load("StringTable");
+            table.Load(id);
+            tables.Add(id, table);
         }
 #else
         if(id.GetType() == typeof(ItemTable))
@@ -53,6 +48,14 @@ public static class DataTableManager
         get
         {
             return Get<StringTable>(DataTableIds.String);
+        }
+    }
+
+    public static ItemTable ItemTable
+    {
+        get
+        {
+            return Get<ItemTable>(DataTableIds.DefaultItem);
         }
     }
 
