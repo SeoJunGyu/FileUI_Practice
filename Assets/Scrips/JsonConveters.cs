@@ -21,7 +21,7 @@ public class Vector3Converter : JsonConverter<Vector3>
 
     public override void WriteJson(JsonWriter writer, Vector3 value, JsonSerializer serializer)
     {
-        writer.WriteStartObject();
+        writer.WriteStartObject(); //중괄효 열기
 
         //키 이름을 지정하고, 벨류를 할당해야한다.
         writer.WritePropertyName("X");
@@ -31,7 +31,7 @@ public class Vector3Converter : JsonConverter<Vector3>
         writer.WritePropertyName("Z");
         writer.WriteValue(value.z);
 
-        writer.WriteEndObject();
+        writer.WriteEndObject(); //중괄효 닫기
     }
 }
 

@@ -139,7 +139,7 @@ public class JsonRecordTest : MonoBehaviour
                 target.transform.SetPositionAndRotation(pos, rot);
             }
             
-            yield return new WaitForSeconds(interval);
+            yield return null;
         }
 
         replayHandle = null;
