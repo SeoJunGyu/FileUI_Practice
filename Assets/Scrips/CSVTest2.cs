@@ -7,10 +7,13 @@ public class CSVTest2 : MonoBehaviour
 
     private void Start()
     {
-        var stringTable = new StringTable();
-        stringTable.Load("StringTableKr");
+        var table = new ItemTable();
+        table.Load("ItemTable");
 
-        test.text = stringTable.Get("HELLO");
+        //var stringTable = new StringTable();
+        //stringTable.Load("StringTableKr");
+
+        //test.text = stringTable.Get("HELLO");
 
         //Debug.Log(stringTable.Get("HELLO"));
         //Debug.Log(stringTable.Get("BYE"));

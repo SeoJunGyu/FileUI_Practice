@@ -1,46 +1,36 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public static class DataTableManager
 {
-    private static readonly Dictionary<string, DataTable> tables = new Dictionary<string, DataTable>();
+    private static readonly Dictionary<string, DataTable> tables =
+        new Dictionary<string, DataTable>();
 
-    static DataTableManager() 
+    static DataTableManager()
     {
         Init();
     }
 
-    //모든 데이터 테이블 가져오기
     private static void Init()
     {
+        //이것도 하드코딩 중이다. / 외부 스크립트로 빼는 바업도 있다고한다.
 #if UNITY_EDITOR
-        var itemtable = new ItemTable();
-        itemtable.Load(DataTableIds.ItemTableId);
-        tables.Add(DataTableIds.ItemTableId, itemtable);
-
         foreach (var id in DataTableIds.StringTableIds)
         {
             var table = new StringTable();
-            //table.Load("StringTable");
             table.Load(id);
             tables.Add(id, table);
         }
 #else
-        if(id.GetType() == typeof(ItemTable))
-        {
-            var table = new ItemTable();
-            stringTable.Load(DataTableIds.String); //현재 언어설정의 언어 테이블 로드
-            tables.Add(DataTableIds.String, stringTable);
-        }
-        else
-        {
-            var table = new StringTable();
-            stringTable.Load(DataTableIds.DefaultItem); //현재 언어설정의 언어 테이블 로드
-            tables.Add(DataTableIds.DefaultItem, stringTable);
-        }
+        var stringTable = new StringTable();
+        stringTable.Load(DataTableIds.String);
+        tables.Add(DataTableIds.String, stringTable);
 #endif
 
+        var itemTable = new ItemTable();
+        itemTable.Load(DataTableIds.Item);
+        tables.Add(DataTableIds.Item, itemTable); //지금은 키검사 생략
     }
 
     public static StringTable StringTable
@@ -55,9 +45,10 @@ public static class DataTableManager
     {
         get
         {
-            return Get<ItemTable>(DataTableIds.DefaultItem);
+            return Get<ItemTable>(DataTableIds.Item);
         }
     }
+
 
     public static T Get<T>(string id) where T : DataTable
     {
@@ -66,7 +57,6 @@ public static class DataTableManager
             Debug.LogError("테이블 없음");
             return null;
         }
-
         return tables[id] as T;
     }
 }

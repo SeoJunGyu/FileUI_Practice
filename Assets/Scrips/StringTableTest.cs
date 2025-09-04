@@ -11,6 +11,6 @@ public class StringTableTest : MonoBehaviour
         //textMeshPro.text = stringTable.Get(id);
 
 
-        textMeshPro.text = DataTableManager.StringTable.Get(id);
+        //textMeshPro.text = DataTableManager.StringTable.Get(id);
     }
 }
