@@ -4,6 +4,20 @@ using System;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
+public class ItemDataConverter : JsonConverter<ItemData>
+{
+    public override ItemData ReadJson(JsonReader reader, Type objectType, ItemData existingValue, bool hasExistingValue, JsonSerializer serializer)
+    {
+        var id = reader.Value as string; //밑의 쓰기와 반대되는 방식이다. 아래는 메서드 읽쓰 방식, 여기는? -> 이거는 별로 좋은 방식은 아니다.
+        return DataTableManager.ItemTable.Get(id);
+    }
+
+    public override void WriteJson(JsonWriter writer, ItemData value, JsonSerializer serializer)
+    {
+        writer.WriteValue(value.Id); //
+    }
+}
+
 public class Vector3Converter : JsonConverter<Vector3>
 {
     public override Vector3 ReadJson(JsonReader reader, Type objectType, Vector3 existingValue, bool hasExistingValue, JsonSerializer serializer)
