@@ -6,16 +6,16 @@ public class SaveLoadTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SaveLoadManage.Data = new SaveDataV1();
-            SaveLoadManage.Data.PlayerName = "TEST";
+            SaveLoadManager.Data = new SaveDataV3();
+            SaveLoadManager.Data.Name = "TEST";
 
-            SaveLoadManage.Save();
+            SaveLoadManager.Save();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SaveLoadManage.Load();
+            SaveLoadManager.Load();
 
-            Debug.Log(SaveLoadManage.Data.PlayerName);
+            Debug.Log(SaveLoadManager.Data.Name);
         }
     }
 }

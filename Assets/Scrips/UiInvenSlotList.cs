@@ -58,7 +58,7 @@ public class UiInvenSlotList : MonoBehaviour
     public int maxCount = 30; //추후 슬롯갯수 제한이 필요하면 쓰면된다.
     private int itemCount = 0; //현재 아이템 수
 
-    private List<SaveItemData> testItemList = new List<SaveItemData>(); //아이템 정보 띄울거
+    private List<SaveItemData> saveItemList = new List<SaveItemData>(); //아이템 정보 띄울거
 
     private SortingOptions sorting = SortingOptions.NameAccending; //정렬 비교 객체
     private FilteringOptions filtering = FilteringOptions.None; //필터링 비교 객체
@@ -69,7 +69,7 @@ public class UiInvenSlotList : MonoBehaviour
         {
             //1. 필터링된 리스트 가져오기 / 2. 정렬 실행 / 3. 슬롯 업데이트
             sorting = value;
-            UpdateSlots(testItemList);
+            UpdateSlots(saveItemList);
         }
     }
     public FilteringOptions Filtering
@@ -78,7 +78,7 @@ public class UiInvenSlotList : MonoBehaviour
         set
         {
             filtering = value;
-            UpdateSlots(testItemList);
+            UpdateSlots(saveItemList);
         }
     }
 
@@ -90,12 +90,17 @@ public class UiInvenSlotList : MonoBehaviour
     //테스트 세이브 앤 로드
     public void Save()
     {
-        var jsontext = JsonConvert.SerializeObject(testItemList);
-        var filePath = Path.Combine(Application.persistentDataPath, "test.json");
-        File.WriteAllText(filePath, jsontext);
+        SaveLoadManager.Data.Name = "TEST";
+        SaveLoadManager.Data.items = saveItemList;
+        SaveLoadManager.Save();
+
+        //var jsontext = JsonConvert.SerializeObject(testItemList);
+        //var filePath = Path.Combine(Application.persistentDataPath, "test.json");
+        //File.WriteAllText(filePath, jsontext);
     }
     public void Load()
     {
+        /*
         var filePath = Path.Combine(Application.persistentDataPath, "test.json");
         if (!File.Exists(filePath))
         {
@@ -104,8 +109,13 @@ public class UiInvenSlotList : MonoBehaviour
 
         var jsonText = File.ReadAllText(filePath);
         testItemList = JsonConvert.DeserializeObject<List<SaveItemData>>(jsonText);
+        */
+        if (SaveLoadManager.Load())
+        {
+            saveItemList = SaveLoadManager.Data.items; //이건 좀 위험하다. -> 데이터가 바뀌면 바로 적용되기 때문이다.
+        }
 
-        UpdateSlots(testItemList);
+        UpdateSlots(saveItemList);
     }
 
     private void Awake()
@@ -224,8 +234,8 @@ public class UiInvenSlotList : MonoBehaviour
 
         var itemInstance = new SaveItemData();
         itemInstance.itemData = DataTableManager.ItemTable.GetRandom();
-        testItemList.Add(itemInstance);
-        UpdateSlots(testItemList);
+        saveItemList.Add(itemInstance);
+        UpdateSlots(saveItemList);
     }
 
     public void RemoveItem()
@@ -235,7 +245,7 @@ public class UiInvenSlotList : MonoBehaviour
             return;
         }
 
-        testItemList.Remove(slotList[selectedSlotIndex].ItemData);
-        UpdateSlots(testItemList);
+        saveItemList.Remove(slotList[selectedSlotIndex].ItemData);
+        UpdateSlots(saveItemList);
     }
 }

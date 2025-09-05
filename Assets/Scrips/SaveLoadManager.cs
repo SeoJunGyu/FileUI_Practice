@@ -1,12 +1,13 @@
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
+using SaveDataVC = SaveDataV3;
 
-public static class SaveLoadManage
+public static class SaveLoadManager
 {
-    public static int SaveDataVersion { get; } = 1;
+    public static int SaveDataVersion { get; } = 3;
 
-    public static SaveDataV1 Data { get; set; } //세이브 데이터 객체 유지
+    public static SaveDataVC Data { get; set; } = new SaveDataVC(); //세이브 데이터 객체 유지
 
     private static readonly string[] SaveFileName =
     {
@@ -22,7 +23,7 @@ public static class SaveLoadManage
     public static JsonSerializerSettings settings = new JsonSerializerSettings() 
     {
         Formatting = Formatting.Indented,
-        TypeNameHandling = TypeNameHandling.Auto,
+        TypeNameHandling = TypeNameHandling.All,
     };
 
     public static bool Save(int slot = 0)
@@ -32,17 +33,26 @@ public static class SaveLoadManage
             return false;
         }
 
-        //Directory.Exists : 해당 경로가 있는지 반환하는 함수
-        if (!Directory.Exists(SaveDirectory))
+        //간단하게 예외 처리
+        try
         {
-            Directory.CreateDirectory(SaveDirectory);
+            //Directory.Exists : 해당 경로가 있는지 반환하는 함수
+            if (!Directory.Exists(SaveDirectory))
+            {
+                Directory.CreateDirectory(SaveDirectory);
+            }
+
+            var path = Path.Combine(SaveDirectory, SaveFileName[slot]); //세이브파일 저장 경로
+            var json = JsonConvert.SerializeObject(Data, settings);
+            File.WriteAllText(path, json); //원래는 예외처리가 필요하다.
+
+            return true;
         }
-
-        var path = Path.Combine(SaveDirectory, SaveFileName[slot]); //세이브파일 저장 경로
-        var json = JsonConvert.SerializeObject(Data, Formatting.Indented);
-        File.WriteAllText(path, json); //원래는 예외처리가 필요하다.
-
-        return true;
+        catch
+        {
+            Debug.LogError("Save 예외 발생");
+            return false;
+        }
     }
 
     public static bool Load(int slot = 0)
@@ -59,12 +69,23 @@ public static class SaveLoadManage
             return false;
         }
 
-        var json = File.ReadAllText(path);
+        try
+        {
+            var json = File.ReadAllText(path);
+            var dataSave = JsonConvert.DeserializeObject<SaveData>(json, settings);
+            
+            while(dataSave.Version < SaveDataVersion) //현재버전까지 업데이트 반복
+            {
+                dataSave = dataSave.VersionUp();
+            }
+            Data = dataSave as SaveDataVC;
 
-        //원래 이 사이에 이런 저런 일들을 해줘야한다.
-
-        Data = JsonConvert.DeserializeObject<SaveDataV1>(json, settings);
-
-        return true;
+            return true;
+        }
+        catch
+        {
+            Debug.LogError("Load 예외 발생");
+            return false;
+        }
     }
 }
