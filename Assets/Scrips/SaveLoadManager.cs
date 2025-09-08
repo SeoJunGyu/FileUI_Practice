@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine;
-using SaveDataVC = SaveDataV3;
+using SaveDataVC = SaveDataV4;
 
 public static class SaveLoadManager
 {
-    public static int SaveDataVersion { get; } = 3;
+    public static int SaveDataVersion { get; } = 4;
 
     public static SaveDataVC Data { get; set; } = new SaveDataVC(); //세이브 데이터 객체 유지
 
@@ -25,6 +25,11 @@ public static class SaveLoadManager
         Formatting = Formatting.Indented,
         TypeNameHandling = TypeNameHandling.All,
     };
+
+    static SaveLoadManager()
+    {
+        Load();
+    }
 
     public static bool Save(int slot = 0)
     {

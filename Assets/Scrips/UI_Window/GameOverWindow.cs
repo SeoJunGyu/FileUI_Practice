@@ -14,20 +14,28 @@ public class GameOverWindow : GenericWindow
     private int count = 0;
     private int MaxCount = 7;
 
+    private Coroutine coroutine;
+
     protected void Awake()
+    {
+        
+    }
+
+    public override void Open()
     {
         textLeftStat.text = "";
         textLeftNumber.text = "";
         textRightStat.text = "";
         textRightNumber.text = "";
         textTotalScore.text = "";
-    }
 
-    public override void Open()
-    {
         base.Open();
-
-        StartCoroutine(CoGameOverLeft());
+        
+        if(coroutine != null)
+        {
+            StopCoroutine(coroutine);
+        }
+        coroutine = StartCoroutine(CoGameOverLeft());
     }
 
     public IEnumerator CoGameOverLeft()
@@ -51,6 +59,7 @@ public class GameOverWindow : GenericWindow
 
             yield return new WaitForSeconds(0.5f);
         }
-        
+
+        coroutine = null;
     }
 }

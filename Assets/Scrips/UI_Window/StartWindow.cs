@@ -29,7 +29,7 @@ public class StartWindow : GenericWindow
 
     public void OnClickContinue()
     {
-        Debug.Log("OnClickContinue");
+        manager.Open(Windows.GameOver);
     }
 
     public void OnClickNewGame()
@@ -39,6 +39,6 @@ public class StartWindow : GenericWindow
 
     public void OnClickOption()
     {
-        Debug.Log("OnClickOption");
+        manager.Open(Windows.Difficulty);
     }
 }
