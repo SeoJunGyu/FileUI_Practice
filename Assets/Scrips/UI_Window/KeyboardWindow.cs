@@ -16,8 +16,11 @@ public class KeyboardWindow : GenericWindow
 
     public List<Button> buttons;
 
-    private StringBuilder cursorStr = new StringBuilder("_", 11);
+    private StringBuilder cursorStr = new StringBuilder();
     private string text;
+    private string textUnderBar = "_";
+    private string textBefore;
+    private bool showCursor = true;
 
     private Coroutine cursorCorutine;
 
@@ -44,17 +47,28 @@ public class KeyboardWindow : GenericWindow
         cursorCorutine = StartCoroutine(CoCursor());
     }
 
+    public override void Close()
+    {
+        if (cursorCorutine != null)
+        {
+            StopCoroutine(cursorCorutine);
+        }
+        cursorCorutine = null;
+
+        base.Close();
+    }
+
     public void OnKey(string key)
     {
-        text += key;
-
         if(textCount < 8)
         {
+            text += key;
             cursorStr = new StringBuilder(text);
             textCursor.text = cursorStr.ToString();
             textCount++;
         }
-        
+        Debug.Log(textCount);
+        RefreshDisplay();
     }
 
     public void OnDelete()
@@ -66,27 +80,45 @@ public class KeyboardWindow : GenericWindow
             textCursor.text = text;
             textCount--;
         }
+
+        RefreshDisplay();
     }
 
     public void OnCancel()
     {
-        textCursor.text = "";
         cursorStr.Remove(0, cursorStr.Length);
+        text = cursorStr.ToString();
+        textCursor.text = text;
         textCount = 0;
-        Debug.Log(cursorStr.Length);
     }
 
     public IEnumerator CoCursor()
     {
-        if(textCount > 11)
+        while (true)
         {
-            yield return null;
+            if (textCount < 8)
+            {
+                showCursor = !showCursor;
+                textCursor.text = showCursor ? $"{text}_" : $"{text} ";
+            }
+            else
+            {
+                textCursor.text = text;
+            }
+
+            yield return new WaitForSeconds(0.5f);
         }
+    }
 
-        cursorStr.Replace(cursorStr[textCount], cursorStr[textCount] == '_' ? ' ' : '_', textCount, 1);
-
-        textCursor.text = cursorStr.ToString();
-
-        yield return new WaitForSeconds(0.5f);
+    private void RefreshDisplay()
+    {
+        if(text.Length < 8)
+        {
+            textCursor.text = showCursor ? $"{text}_" : $"{text} ";
+        }
+        else
+        {
+            textCursor.text = text;
+        }
     }
 }

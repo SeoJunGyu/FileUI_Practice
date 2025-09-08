@@ -1971,7 +1971,7 @@ MonoBehaviour:
   - {fileID: 1208686727}
   - {fileID: 1953315857}
   - {fileID: 910785331}
-  defaultWindow: 3
+  defaultWindow: 2
 --- !u!224 &377815700 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 527710038585876079, guid: 83c58802912a240489d1bd7c0517f3fb, type: 3}
